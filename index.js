@@ -1,11 +1,28 @@
 import { configDotenv } from "dotenv";
+import { Client, GatewayIntentBits } from "discord.js";
 
-import { Client, Events, GatewayIntentBits } from "discord.js";
+configDotenv();
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds , GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
+});
 
-client.on('messageCreate',(message) =>{
-    console.log(message.content);
-})
+client.once("clientReady", () => {
+  console.log(`Logged in as ${client.user.tag}`);
+});
 
-client.login(token);
+client.on("messageCreate", async (message) => {
+  if (message.author.bot) return;
+
+  console.log(message.content);
+
+  if (message.content === "!ping") {
+    await message.reply("Pong!");
+  }
+});
+
+client.login(process.env.DISCORD_TOKEN);
