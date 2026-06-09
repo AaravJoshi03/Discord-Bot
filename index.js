@@ -17,11 +17,17 @@ client.once("clientReady", () => {
 
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
+  message.reply({
+    content : "Hi from Nova",
+  });
+});
 
-  console.log(message.content);
 
-  if (message.content === "!ping") {
-    await message.reply("Pong!");
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === "ping") {
+    await interaction.reply("Pong!");
   }
 });
 
